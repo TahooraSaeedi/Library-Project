@@ -55,19 +55,25 @@ public class Main {
                     case 2:
                         System.out.println("which request?(enter number of request)");
                         int reqId= sc.nextInt();
+                        Request target= DataBase.requests.get(reqId-1);
                         System.out.println("which one? 1.confirm 2.reject");
                         int reqState= sc.nextInt();
-                        srlib.approvingTheRequest(new User(),new Book(),new RequestStatus());
+                        if (reqState == 1) {
+                            lib.approvingTheRequest(target);
+                        } else if (reqState == 2) {
+                            lib.rejectingTheRequest(target);
+                        }
+
                         break;
                 }
                 System.out.println("what do you do? 0.exit 1.run on");
-                boolean runOn= sc.nextInt();
+                boolean runOn= sc.nextBoolean();
             }while(runOn);
         }
     }
 
     public static void caseRoleBookReader(String userName,String password){
-        BookReader usr=new BookReader();
+        BookReader usr=new BookReader(userName,password);
         boolean result3=usr.verify(userName,pass);
         if(result3) {
             do{
@@ -94,7 +100,7 @@ public class Main {
                         break;
                 }
                 System.out.println("what do you do? 0.exit 1.run on");
-                boolean runOn= sc.nextInt();
+                boolean runOn= sc.nextBoolean();
             }while(runOn);
         }
     }
