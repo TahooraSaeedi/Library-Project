@@ -23,6 +23,12 @@ public abstract class User {
         this.password = passWord;
     }
 
+    public static void viewTheListOfBooks() {
+        for (Book book : DataBase.books) {
+            System.out.println(book);
+        }
+    }
+
     public static User login(String userName, String passWord) {
         for (User user : DataBase.users) {
             if (user.getUserName().equals(userName) && user.getPassword().equals(passWord)) return user;
@@ -66,11 +72,7 @@ class Manager extends User {
         super(userName, password);
     }
 
-    public void viewTheListOfBooks() {
-        for (Book book : DataBase.books) {
-            System.out.println(book);
-        }
-    }
+
 
     public boolean addBook(Book book) {
         if (!DataBase.books.contains(book)) {

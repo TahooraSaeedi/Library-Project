@@ -6,8 +6,10 @@ public class Book {
     private BookStatus status = BookStatus.BOOKABLE;
     private User theLastRecipient;
 
-    public Book(String name) {
+    public Book(String name,String authorName,Integer yearOfPublication) {
         this.name = name;
+        this.authorName = authorName;
+        this.yearOfPublication = yearOfPublication;
     }
 
     public String getName() {
