@@ -21,15 +21,27 @@ This project is a collaborative effort by three developers to create a Library M
 
 The project is organized into the following structure within the src directory:
 
-src/
-├── admin/
-│   └── Admin.java
-├── librarian/
-│   └── Librarian.java
-├── member/
-│   └── Member.java
-└── book/
-    └── Book.java
+Library-Project/
+│
+├── .idea/                        # IDE configuration files (IntelliJ IDEA)
+├── out/                          # Compiled output files
+├── src/                          # Source code directory
+│   ├── Book.java                 # Represents a book in the library
+│   ├── BookStatus.java           # Enum for the status of a book (e.g., Available, Borrowed)
+│   ├── DataBase.java             # Manages the database connection and operations
+│   ├── Main.java                 # Entry point of the application
+│   ├── Request.java              # Handles requests related to book borrowing
+│   ├── RequestStatus.java        # Enum for the status of a request (e.g., Pending, Approved)
+│   ├── Role/                     # Directory containing role-related classes
+│   │   ├── BookReader.java       # Class for users who can read and borrow books
+│   │   ├── Librarian.java        # Class representing a librarian
+│   │   ├── Manager.java          # Class representing a manager of the library
+│   │   └── User.java             # Base class for all types of users in the system
+│
+├── Library.iml                   # IntelliJ IDEA project file
+├── mysql-connector-j-8.0.31-javadoc.jar   # MySQL connector library for database interaction
+└── README.md                     # Project documentation file
+
 - admin/: Contains the Admin class which handles the functionalities related to book management.
 - librarian/: Contains the Librarian class which handles the functionalities related to request management.
 - member/: Contains the Member class which handles the functionalities related to library members.
