@@ -3,6 +3,12 @@ public class Request {
     private Book book;
     private RequestStatus status;
 
+    public Request(User User, Book book, RequestStatus status) {
+        user = User;
+        this.book = book;
+        this.status = status;
+    }
+
     public User getUser() {
         return user;
     }
