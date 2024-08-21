@@ -6,6 +6,7 @@ public class Main {
     public static void caseRoleManager(String userName,String password) {
         Manager man=new Manager(userName,password);
         if(User.login(userName,password) != null) {
+            boolean runOn=false;
             do{
                 System.out.println("please enter number of want to do? 1.see books 2.insert new book 3.remove a book");
                 int want=sc.nextInt();
@@ -37,7 +38,7 @@ public class Main {
                         break;
                 }
                 System.out.println("what do you do? 0.exit 1.run on");
-                boolean runOn= sc.nextBoolean();
+                runOn= (sc.nextInt() == 1);
             }while (runOn);
         }
     }
@@ -45,6 +46,7 @@ public class Main {
     public static void caseRoleLibrarian(String userName,String password){
         Librarian lib=new Librarian(userName,password);
         if(User.login(userName,password) != null) {
+            boolean runOn=false;
             do{
                 System.out.println("please enter number of want to do? 1.See the book reservation request list 2.Confirm or reject the reservation request");
                 int want=sc.nextInt();
@@ -67,40 +69,61 @@ public class Main {
                         break;
                 }
                 System.out.println("what do you do? 0.exit 1.run on");
-                boolean runOn= sc.nextBoolean();
+                runOn= (sc.nextInt() == 1);
             }while(runOn);
         }
     }
 
     public static void caseRoleBookReader(String userName,String password){
         BookReader usr=new BookReader(userName,password);
-        boolean result3=usr.verify(userName,pass);
-        if(result3) {
+        if(User.login(userName,password) != null) {
+            boolean runOn=false;
             do{
                 System.out.println("please enter number of want to do? 1.See books 2.reservation request 3.see state of your request");
                 int want=sc.nextInt();
                 switch (want){
                     case 1:
-                        Library lib2=new Library();
-                        lib2.getbooks();
+                        User.viewTheListOfBooks();
                         break;
                     case 2:
-                        Library lib3=new Library();
-                        System.out.println("which book do you want it?");
+                        System.out.println("which book do you want it (name)?");
                         String bookName= sc.nextLine();
-                        lib3.findBook(bookName);
+                        Book reqBook = null;
+                        for(Book book :DataBase.books){
+                            if(book.getName().equals(bookName)){
+                                reqBook=book;
+                            }
+                        }
+                        if(reqBook == null){
+                            System.out.println("warning: book not found! ");
+                            break;
+                        }
+                        if(reqBook.getStatus().equals(BookStatus.NOT_BOOKABLE)){
+                            System.out.println("warning: book is not bookable! ");
+                            break;
+                        }
+                        System.out.println(reqBook);
                         System.out.println("Are you sure? do you want it? yes/no");
                         String sure= sc.nextLine();
                         if(sure.equals("yes")) {
-                            usr.newReq(bookName);
+                            Request newReq=new Request(usr,reqBook,RequestStatus.PENDING_APPROVAL);
+                            if (!DataBase.requests.contains(newReq)) {
+                                DataBase.requests.add(newReq);
+                            }else{
+                                System.out.println("warning: there is same request!");
+                            }
                         }
                         break;
                     case 3:
-                        usr.stateOfReq(userName);
+                        for (Request request : DataBase.requests) {
+                            if(request.getUser().getUserName().equals(userName)){
+                                System.out.println(request);
+                            }
+                        }
                         break;
                 }
                 System.out.println("what do you do? 0.exit 1.run on");
-                boolean runOn= sc.nextBoolean();
+                runOn= (sc.nextInt() == 1);
             }while(runOn);
         }
     }
