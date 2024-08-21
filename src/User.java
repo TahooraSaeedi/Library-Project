@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Objects;
+
 public abstract class User {
     private String userName;
     private String password;
@@ -23,7 +26,7 @@ public abstract class User {
         this.password = passWord;
     }
 
-    public static void viewTheListOfBooks() {
+    public void viewTheListOfBooks() {
         for (Book book : DataBase.books) {
             System.out.println(book);
         }
@@ -54,6 +57,7 @@ public abstract class User {
                 user = new BookReader(userName, passWord);
                 break;
         }
+        DataBase.users.add(user);
         return user;
     }
 
@@ -64,6 +68,15 @@ public abstract class User {
                 " }";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Book)) return false;
+        else {
+            User user = (User) o;
+            return this.getUserName().equals(user.getUserName()) && this.getPassword().equals(user.getPassword());
+        }
+    }
+
 }
 
 class Manager extends User {
@@ -71,7 +84,6 @@ class Manager extends User {
     public Manager(String userName, String password) {
         super(userName, password);
     }
-
 
 
     public boolean addBook(Book book) {
@@ -104,7 +116,7 @@ class Librarian extends User {
         request.setStatus(RequestStatus.APPROVED);
         User user = request.getUser();
         Book book = request.getBook();
-        // TODO: add request.getBook() to list of request.getUser() books
+        ((BookReader) user).addBook(book);
         book.setStatus(BookStatus.NOT_BOOKABLE);
         book.setTheLastRecipient(user);
     }
@@ -117,10 +129,48 @@ class Librarian extends User {
 
 class BookReader extends User {
 
+    private ArrayList<Book> books = new ArrayList<Book>();
+
     public BookReader(String userName, String passWord) {
         super(userName, passWord);
     }
 
-    // TODO: implement the user class
+    public ArrayList<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(ArrayList<Book> books) {
+        this.books = books;
+    }
+
+    public void addBook(Book book) {
+        this.getBooks().add(book);
+    }
+
+    public void reservationRequest(Book book) {
+        Request request = new Request(this, book, RequestStatus.PENDING_APPROVAL);
+    }
+
+    public void viewTheListOfRequests() {
+        for (Request request : DataBase.requests) {
+            if (request.getUser().equals(this)) {
+                System.out.println(request);
+            }
+        }
+    }
+
+    public boolean removeUnapprovedRequest(Request request) {
+        boolean result;
+        if (request.getStatus() != RequestStatus.PENDING_APPROVAL) return false;
+        return DataBase.requests.remove(request);
+    }
+
+    public void viewApprovedRequests() {
+        for (Request request : DataBase.requests) {
+            if (request.getUser().equals(this) && request.getStatus() == RequestStatus.APPROVED) {
+                System.out.println(request);
+            }
+        }
+    }
 
 }
